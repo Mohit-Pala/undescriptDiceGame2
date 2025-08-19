@@ -11,3 +11,4 @@ class DiceFaces(Enum):
     FIVE = 5
     SIX = 6
     WILDCARD = 0
+    NOT_ROLLED = -1

@@ -9,6 +9,11 @@ class Die:
     num_sides: int = 6
     auto_increment_id: int = 0
     dice_sides: list[DiceSide] = []
+    currently_selected: bool = False
+    already_scored: bool = False
+    currently_rolled: DiceFaces = DiceFaces.NOT_ROLLED
+
+    # constructor
 
     def __init__(self):
         self.num_sides: int = 6
@@ -21,10 +26,13 @@ class Die:
             {'side_id': 6, 'die_side': DiceFaces.SIX, 'weight': 1}
         ]
         self.auto_increment_id = 7
+        self.currently_selected = False
+        self.already_scored = False
 
     def add_side(self, side_face: DiceFaces = DiceFaces.WILDCARD, weight: float = 1):
         self.dice_sides.append(
-            {'side_id': self.auto_increment_id, 'die_side': side_face, 'weight': weight}
+            {'side_id': self.auto_increment_id,
+                'die_side': side_face, 'weight': weight}
         )
         self.auto_increment_id += 1
 
@@ -39,7 +47,14 @@ class Die:
                 side['weight'] = weight
                 break
 
+    def select_die(self):
+        self.currently_selected = True
+
+    def deselect_die(self):
+        self.currently_selected = False
+
     def roll(self) -> DiceFaces:
         from random import choices
-        return choices([side['die_side'] for side in self.dice_sides],
+        self.currently_rolled = choices([side['die_side'] for side in self.dice_sides],
                        weights=[side['weight'] for side in self.dice_sides])[0]
+        return self.currently_rolled
